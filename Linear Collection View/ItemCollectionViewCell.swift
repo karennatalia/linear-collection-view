@@ -8,14 +8,20 @@
 import UIKit
 
 class ItemCollectionViewCell: UICollectionViewCell {
-    
-    @IBOutlet var itemTitle: UILabel!
+
     @IBOutlet var itemImage: UIImageView!
+    @IBOutlet var itemTitle: UILabel!
     
-    func setup(item: Item) {
-        itemImage.image = UIImage(systemName: item.imageName)
-        itemTitle.text = item.title
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
         self.backgroundColor = .systemGray6
         self.layer.cornerRadius = 20
     }
+    
+    func setupValue(item: Item) {
+        itemImage.image = UIImage(systemName: item.imageName)
+        itemTitle.text = item.title
+    }
+
 }
