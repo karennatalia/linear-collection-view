@@ -40,6 +40,12 @@ class ViewController: UIViewController {
     ]
     let cellID = "itemCell"
     
+    var hide = false
+    
+    func toggleHide() {
+        hide.toggle()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -102,7 +108,6 @@ class ViewController: UIViewController {
     }
     
     @objc func nextItem(_ sender: Any) {
-        items.removeFirst()
         reloadWithAnimation()
     }
     
@@ -117,11 +122,16 @@ class ViewController: UIViewController {
         ]
         
         items = newItems
+        hide = false
         itemCollectionView.reloadData()
     }
     
     func reloadWithAnimation() {
-        UIView.animate(withDuration: 1.5, delay: 2.0, options: .curveEaseIn, animations: { [self] in
+        toggleHide()
+        itemCollectionView.reloadItems(at: [IndexPath(row: 0, section: 0)])
+        
+        items.removeFirst()
+        UIView.animate(withDuration: 1, delay: 0.5, options: .curveEaseIn, animations: { [self] in
             itemCollectionView.performBatchUpdates {
                 itemCollectionView.deleteItems(at: [IndexPath(row: 0, section: 0)])
             }
@@ -136,7 +146,14 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "itemCell", for: indexPath) as! ItemCollectionViewCell
-        cell.setupValue(item: items[indexPath.row])
+        
+        if indexPath.row == 0 && hide == true {
+            cell.makeHidden()
+        }
+        else {
+            cell.setupValue(item: items[indexPath.row])
+        }
+        
         return cell
     }
 }

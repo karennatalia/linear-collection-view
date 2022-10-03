@@ -15,13 +15,20 @@ class ItemCollectionViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        self.backgroundColor = .systemGray6
         self.layer.cornerRadius = 20
+        self.contentView.backgroundColor = .systemGray6
     }
     
     func setupValue(item: Item) {
         itemImage.image = UIImage(systemName: item.imageName)
         itemTitle.text = item.title
+    }
+    
+    func makeHidden() {
+        self.contentView.alpha = 1
+        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseIn, animations: { [self] in
+            self.contentView.alpha = 0
+        }, completion: nil)
     }
 
 }
